@@ -13,7 +13,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, '../client/public/uploads');
+    callback(null, './uploads');
   },
   filename: (req, file, callback) => {
     callback(null, file.originalname);
@@ -77,8 +77,8 @@ app.post('/insert', upload.single('articleImage'), async (req, res) => {
   }); // here values are same as in frontend
 
   try {
-    await food.save();
-    console.log('Data inserted..');
+    const response = await food.save();
+    res.send(response)
   } catch (err) {
     console.log(err);
   }
