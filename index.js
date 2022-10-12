@@ -114,12 +114,13 @@ app.put('/update', upload.single('articleImage'), async (req, res) => {
   const fileName = req.file.originalname;
 
   try {
-    await FoodModel.findById(id, (err, updateFood) => {
+    await FoodModel.findById(id, async (err, updateFood) => {
       updateFood.foodName = foodName;
       updateFood.daysSinceIAte = days;
       updateFood.articleImage = fileName;
-      updateFood.save();
-      res.send('updated...');
+      const response = await updateFood.save();
+      console.log(response);
+      res.send(response);
     });
   } catch (error) {
     console.log(error);
