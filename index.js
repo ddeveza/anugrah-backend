@@ -37,15 +37,16 @@ app.use('/api/auth', authRoutes);
 // import db file
 const FoodModel = require('./models/Food');
 const mongoose = require('mongoose');
-const { request } = require('express');
+
 // db settings
 mongoose.connect(
-  'mongodb+srv://masiha:Xb7kuTSwuDgUdMGM@cluster0.o73j306.mongodb.net/?retryWrites=true&w=majority',
+  process.env.DB,
   {
     useNewUrlParser: true,
   }
 );
-console.log('conected to db..');
+
+
 
 app.patch('/insert', async (req, res) => {
   const likes = req.body.likes;
@@ -129,5 +130,5 @@ app.put('/update', upload.single('articleImage'), async (req, res) => {
 
 // crud ends here
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 app.listen(port, console.log(`Listening on port ${port}...`));
