@@ -77,7 +77,7 @@ app.post('/insert', upload.single('articleImage'), async (req, res) => {
     daysSinceIAte: days,
     articleImage: {
       data: fs.readFileSync("uploads/" + fileName),
-      contentType:"image/png"
+      contentType: "image/png"
     },
   }); // here values are same as in frontend
 
@@ -121,12 +121,12 @@ app.put('/update', upload.single('articleImage'), async (req, res) => {
     await FoodModel.findById(id, async (err, updateFood) => {
       updateFood.foodName = foodName;
       updateFood.daysSinceIAte = days;
-      updateFood.articleImage =  {
-      data: fs.readFileSync("uploads/" + fileName),
-      contentType:"image/png"
-    };
+      updateFood.articleImage = {
+        data: fs.readFileSync("uploads/" + fileName),
+        contentType: "image/png"
+      };
       const response = await updateFood.save();
-      console.log(response);
+
       res.send(response);
     });
   } catch (error) {
