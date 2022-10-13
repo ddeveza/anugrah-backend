@@ -5,6 +5,7 @@ const cors = require('cors');
 const connection = require('./db');
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
+const fs = require('fs')
 // import upload from '../client/public/uploads'
 
 // we use multer to upload images
@@ -74,7 +75,10 @@ app.post('/insert', upload.single('articleImage'), async (req, res) => {
   const food = new FoodModel({
     foodName: foodName,
     daysSinceIAte: days,
-    articleImage: fileName,
+    articleImage: {
+      data: fs.readFileSync("uploads/" + fileName),
+      contentType:"image/png"
+    },
   }); // here values are same as in frontend
 
   try {
@@ -117,7 +121,10 @@ app.put('/update', upload.single('articleImage'), async (req, res) => {
     await FoodModel.findById(id, async (err, updateFood) => {
       updateFood.foodName = foodName;
       updateFood.daysSinceIAte = days;
-      updateFood.articleImage = fileName;
+      updateFood.articleImage =  {
+      data: fs.readFileSync("uploads/" + fileName),
+      contentType:"image/png"
+    };
       const response = await updateFood.save();
       console.log(response);
       res.send(response);
