@@ -81,10 +81,10 @@ app.post('/insert', upload.single('articleImage'), async (req, res) => {
       )
     ); */
 
-  console.log({image})
+
  const lowQuality=  await sharp(image)
     .webp({ quality: 30  }).toBuffer()
-  console.log({lowQuality})
+
   const base64String = btoa(new Uint8Array(lowQuality).reduce(function(data, byte) {
     return data + String.fromCharCode(byte);
   }, ''));
