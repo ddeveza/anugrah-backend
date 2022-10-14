@@ -5,6 +5,7 @@ const cors = require('cors');
 const connection = require('./db');
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
+const sharp = require("sharp");
 const fs = require('fs')
 // import upload from '../client/public/uploads'
 
@@ -80,7 +81,11 @@ app.post('/insert', upload.single('articleImage'), async (req, res) => {
       )
     ); */
 
-  const base64String = btoa(new Uint8Array(image).reduce(function(data, byte) {
+  console.log({image})
+ const lowQuality=  await sharp(image)
+    .webp({ quality: 30  }).toBuffer()
+  console.log({lowQuality})
+  const base64String = btoa(new Uint8Array(lowQuality).reduce(function(data, byte) {
     return data + String.fromCharCode(byte);
   }, ''));
 
