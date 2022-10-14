@@ -72,11 +72,23 @@ app.post('/insert', upload.single('articleImage'), async (req, res) => {
   const foodName = req.body.foodName;
   const days = req.body.days;
   const fileName = req.file.originalname;
+
+  const image = fs.readFileSync("uploads/" + fileName);
+  /*   const base64String = btoa(
+      String.fromCharCode(
+        ...new Uint8Array(image)
+      )
+    ); */
+
+  const base64String = btoa(new Uint8Array(image).reduce(function(data, byte) {
+    return data + String.fromCharCode(byte);
+  }, ''));
+
   const food = new FoodModel({
     foodName: foodName,
     daysSinceIAte: days,
     articleImage: {
-      data: fs.readFileSync("uploads/" + fileName),
+      data: base64String,
       contentType: "image/png"
     },
   }); // here values are same as in frontend
