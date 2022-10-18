@@ -82,8 +82,8 @@ app.post('/insert', upload.single('articleImage'), async (req, res) => {
     ); */
 
 
- const lowQuality=  await sharp(image)
-    .webp({ quality: 30  }).toBuffer()
+  const lowQuality = await sharp(image)
+    .webp({ quality: 30 }).toBuffer()
 
   const base64String = btoa(new Uint8Array(lowQuality).reduce(function(data, byte) {
     return data + String.fromCharCode(byte);
@@ -133,13 +133,29 @@ app.put('/update', upload.single('articleImage'), async (req, res) => {
   const days = req.body.days;
   // const fileName = req.file.originalname
   const fileName = req.file.originalname;
+  const image = fs.readFileSync("uploads/" + fileName);
+  /*   const base64String = btoa(
+      String.fromCharCode(
+        ...new Uint8Array(image)
+      )
+    ); */
 
+
+  const lowQuality = await sharp(image)
+    .webp({ quality: 30 }).toBuffer()
+
+  const base64String = btoa(new Uint8Array(lowQuality).reduce(function(data, byte) {
+    return data + String.fromCharCode(byte);
+  }, ''));
+
+
+  // const base64String = Buffer.from(lowQuality, 'base64').toString()
   try {
     await FoodModel.findById(id, async (err, updateFood) => {
       updateFood.foodName = foodName;
       updateFood.daysSinceIAte = days;
       updateFood.articleImage = {
-        data: fs.readFileSync("uploads/" + fileName),
+        data: base64String,
         contentType: "image/png"
       };
       const response = await updateFood.save();
